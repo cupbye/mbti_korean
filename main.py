@@ -1,61 +1,126 @@
-# app.py
-
 import streamlit as st
 
-# MBTI 유형별 가상 데이터 정의 (기존 로직과 동일)
-# 이 데이터는 실제 연구가 아닌, 재미를 위해 만들어진 가상의 정보입니다.
-mbti_data = {
-    'INTJ': {'emoji': '🐲', 'score': 96, 'strengths': '논리적 비판, 비문학 독해, 구조 분석에 강점을 보입니다.'},
-    'INTP': {'emoji': '🦉', 'score': 94, 'strengths': '복잡한 이론을 이해하고 추론하며, 독창적인 해석을 잘합니다.'},
-    'ENTJ': {'emoji': '🦅', 'score': 95, 'strengths': '토론과 발표에 능하며, 글의 핵심 주장을 빠르게 파악합니다.'},
-    'ENTP': {'emoji': '🦄', 'score': 93, 'strengths': '다양한 관점을 제시하고, 창의적인 문제 해결 능력이 뛰어납니다.'},
-    'INFJ': {'emoji': '🐋', 'score': 95, 'strengths': '문학 작품에 깊이 공감하며, 인물의 내면 심리 분석에 탁월합니다.'},
-    'INFP': {'emoji': '🌸', 'score': 93, 'strengths': '시적 표현을 잘 이해하고, 감성적이고 깊이 있는 글쓰기를 잘합니다.'},
-    'ENFJ': {'emoji': '☀️', 'score': 92, 'strengths': '화법과 작문에 능숙하며, 타인을 설득하고 공감을 이끌어내는 능력이 좋습니다.'},
-    'ENFP': {'emoji': '🦋', 'score': 91, 'strengths': '풍부한 상상력을 바탕으로 자유로운 형식의 글쓰기를 즐깁니다.'},
-    'ISTJ': {'emoji': '🧱', 'score': 94, 'strengths': '문법, 어문 규정을 꼼꼼하게 학습하고 체계적으로 내용을 정리합니다.'},
-    'ISFJ': {'emoji': '🛡️', 'score': 90, 'strengths': '세부 내용을 잘 기억하고, 안정적이고 성실한 학습 태도를 가집니다.'},
-    'ESTJ': {'emoji': '🏛️', 'score': 92, 'strengths': '명확한 근거를 바탕으로 실용적인 글을 쓰는 것을 선호합니다.'},
-    'ESFJ': {'emoji': '🤝', 'score': 89, 'strengths': '자신의 경험을 바탕으로 한 작문에 능하고, 의사소통 능력이 좋습니다.'},
-    'ISTP': {'emoji': '🔧', 'score': 88, 'strengths': '문제 해결 중심으로 독해하며, 언어의 기술적 측면을 분석하는 것을 즐깁니다.'},
-    'ISFP': {'emoji': '🎨', 'score': 87, 'strengths': '작품의 예술성을 감상하고, 미적 감수성을 바탕으로 주관적 감상을 잘 표현합니다.'},
-    'ESTP': {'emoji': '⚡️', 'score': 86, 'strengths': '실전 문제 풀이에 강하고, 토론 등에서 순발력과 임기응변이 뛰어납니다.'},
-    'ESFP': {'emoji': '🎤', 'score': 85, 'strengths': '생생한 경험을 바탕으로 표현력이 좋으며, 대중적인 글쓰기에 재능이 있습니다.'}
+# MBTI 유형별 가상 데이터 정의 (설명 추가)
+mbti_data_with_explanation = {
+    'INTJ': {
+        'emoji': '🐲', 'score': 96,
+        'strengths': '논리적 비판, 비문학 독해, 구조 분석',
+        'explanation': '분석적 사고와 전략적 계획 능력이 뛰어나 복잡한 텍스트의 구조를 파악하고 논리적 오류를 찾아내는 데 강점을 보입니다. 추상적인 개념 이해 능력은 심오한 비문학 지문 이해에 도움이 됩니다.'
+    },
+    'INTP': {
+        'emoji': '🦉', 'score': 94,
+        'strengths': '복잡한 이론 이해, 추론적 사고, 독창적 해석',
+        'explanation': '끊임없이 질문하고 새로운 아이디어를 탐색하는 능력은 다양한 관점의 텍스트를 이해하고 독창적인 해석을 하는 데 유리합니다. 논리적 사고는 비판적 읽기와 추론 문제 해결에 도움이 됩니다.'
+    },
+    'ENTJ': {
+        'emoji': '🦅', 'score': 95,
+        'strengths': '토론 및 발표, 핵심 주장 파악, 설득력 있는 글쓰기',
+        'explanation': '리더십과 결단력이 뛰어나 텍스트의 핵심 내용을 빠르게 파악하고 자신의 주장을 논리적으로 펼치는 데 능숙합니다. 명확하고 설득력 있는 의사 전달 능력은 발표와 토론에서 두각을 나타냅니다.'
+    },
+    'ENTP': {
+        'emoji': '🦄', 'score': 93,
+        'strengths': '다양한 관점 제시, 창의적 문제 해결, 열띤 토론',
+        'explanation': '새로운 가능성을 탐색하고 아이디어를 발상하는 능력이 뛰어나 텍스트를 다양한 관점에서 분석하고 창의적인 해결책을 제시합니다. 뛰어난 언변은 토론 상황에서 빛을 발합니다.'
+    },
+    'INFJ': {
+        'emoji': '🐋', 'score': 95,
+        'strengths': '문학 작품 공감, 인물의 내면 심리 분석, 상징과 은유 파악',
+        'explanation': '타인의 감정에 깊이 공감하고 통찰하는 능력이 뛰어나 문학 작품 속 인물의 감정과 동기를 잘 이해합니다. 상징과 은유를 파악하는 능력은 문학 작품의 깊이 있는 해석을 가능하게 합니다.'
+    },
+    'INFP': {
+        'emoji': '🌸', 'score': 93,
+        'strengths': '시적 표현 이해, 감성적 글쓰기, 깊이 있는 작품 해석',
+        'explanation': '내면의 가치관과 감수성이 풍부하여 문학 작품의 정서적 측면에 깊이 공감하며, 자신만의 독특한 시각으로 작품을 해석합니다. 섬세한 감정 표현 능력은 감성적인 글쓰기에 도움이 됩니다.'
+    },
+    'ENFJ': {
+        'emoji': '☀️', 'score': 92,
+        'strengths': '화법과 작문, 타인 설득 및 공감, 문학 작품의 교훈 전달',
+        'explanation': '뛰어난 소통 능력과 타인에 대한 깊은 이해를 바탕으로 자신의 생각을 명확하고 설득력 있게 전달합니다. 문학 작품을 통해 교훈을 얻고 다른 사람들에게 긍정적인 영향을 주는 것을 중요하게 생각합니다.'
+    },
+    'ENFP': {
+        'emoji': '🦋', 'score': 91,
+        'strengths': '상상력 풍부, 자유로운 형식의 글쓰기, 새로운 해석 시도',
+        'explanation': '넘치는 에너지와 창의적인 사고로 틀에 얽매이지 않는 자유로운 형식의 글쓰기를 즐깁니다. 새로운 아이디어를 탐색하고 독특한 관점에서 텍스트를 해석하는 것을 좋아합니다.'
+    },
+    'ISTJ': {
+        'emoji': '🧱', 'score': 94,
+        'strengths': '문법 및 어문 규정, 체계적인 내용 정리, 사실적 정보 파악',
+        'explanation': '정확하고 체계적인 것을 선호하는 성향으로 문법 및 어문 규정을 철저히 학습하고 텍스트의 정보를 논리적으로 정리하는 데 능숙합니다. 사실에 기반한 이해를 중요하게 생각합니다.'
+    },
+    'ISFJ': {
+        'emoji': '🛡️', 'score': 90,
+        'strengths': '꼼꼼한 작품 읽기, 세부 내용 기억, 안정적인 학습 태도',
+        'explanation': '세심하고 주의 깊은 성격으로 텍스트의 세부 내용을 꼼꼼하게 파악하고 기억하는 데 강점을 보입니다. 안정적인 학습 태도를 통해 꾸준히 실력을 향상시킵니다.'
+    },
+    'ESTJ': {
+        'emoji': '🏛️', 'score': 92,
+        'strengths': '학습 계획 및 실행, 실용적인 글쓰기, 명확한 근거 제시',
+        'explanation': '계획적이고 효율적인 학습 방식을 선호하며, 실제적이고 명확한 글쓰기를 중요하게 생각합니다. 논리적인 근거를 제시하여 자신의 주장을 뒷받침하는 데 능숙합니다.'
+    },
+    'ESFJ': {
+        'emoji': '🤝', 'score': 89,
+        'strengths': '의사소통 능력, 경험을 바탕으로 한 작문, 협동 학습',
+        'explanation': '사교적이고 타인과 잘 소통하는 능력을 바탕으로 자신의 경험을 활용하여 쉽게 이해할 수 있는 글을 씁니다. 협력적인 학습 환경에서 더욱 능력을 발휘합니다.'
+    },
+    'ISTP': {
+        'emoji': '🔧', 'score': 88,
+        'strengths': '문제 해결 중심 독해, 언어의 기술적 측면 분석, 간결한 표현',
+        'explanation': '실용적이고 분석적인 사고방식으로 텍스트를 통해 제시된 문제점을 파악하고 해결하는 데 집중합니다. 언어의 구조나 기능과 같은 기술적인 측면 분석에 흥미를 느낍니다.'
+    },
+    'ISFP': {
+        'emoji': '🎨', 'score': 87,
+        'strengths': '예술적 표현 감상, 주관적 감상 표현, 미적 감수성',
+        'explanation': '섬세한 감수성과 예술적인 이해를 바탕으로 문학 작품의 아름다움을 느끼고 자신만의 독특한 감상으로 표현하는 것을 즐깁니다. 비유나 은유와 같은 표현에 민감하게 반응합니다.'
+    },
+    'ESTP': {
+        'emoji': '⚡️', 'score': 86,
+        'strengths': '순발력 있는 문제 풀이, 실전 적용, 토론에서의 임기응변',
+        'explanation': '현실적이고 활동적인 성향으로 실제 문제 해결에 빠르게 적응하며, 토론 상황에서 뛰어난 순발력과 임기응변 능력을 발휘합니다. 직접 경험을 통해 얻은 지식을 중요하게 생각합니다.'
+    },
+    'ESFP': {
+        'emoji': '🎤', 'score': 85,
+        'strengths': '생생한 경험 표현, 발표 및 연기, 대중적인 글쓰기',
+        'explanation': '자신의 경험을 생생하고 흥미롭게 표현하는 데 능숙하며, 발표나 연기와 같이 자신을 드러내는 활동을 즐깁니다. 대중의 관심을 끄는 쉽고 재미있는 글쓰기에 재능이 있습니다.'
+    }
 }
 
 # --- Streamlit UI 구성 ---
 
 # 1. 제목과 설명
 st.title("👑 MBTI 유형별 국어 가상 성취도 분석기")
-st.caption("재미로 보는 MBTI별 국어 강점 분석! (가상 데이터 기반)")
+st.caption("MBTI 성격 유형과 가상적인 국어 능력의 연관성을 살펴봅니다. (재미 기반)")
 
 # 2. MBTI 유형 선택 (Selectbox 사용)
-st.divider() # 구분선
-mbti_options = list(mbti_data.keys())
+st.divider()
+mbti_options = list(mbti_data_with_explanation.keys())
 selected_mbti = st.selectbox(
     '분석하고 싶은 MBTI 유형을 선택하세요.',
     options=mbti_options,
-    index=None, # 처음에 아무것도 선택되지 않도록 설정
+    index=None,
     placeholder="MBTI 유형을 선택해주세요..."
 )
 
 # 3. 선택된 유형에 대한 정보 표시
 if selected_mbti:
-    info = mbti_data[selected_mbti]
-    
-    # st.subheader() 와 st.markdown() 을 사용해 결과 보기 좋게 표시
-    st.subheader(f"{selected_mbti} {info['emoji']} 유형 분석 결과")
-    
-    col1, col2 = st.columns(2) # 2개의 컬럼으로 레이아웃 나누기
-    with col1:
-        st.markdown("**가상 평균 점수**")
-        st.metric(label="점수", value=f"{info['score']} 점")
+    info = mbti_data_with_explanation.get(selected_mbti)
+    if info:
+        st.subheader(f"{selected_mbti} {info['emoji']} 유형 분석 결과")
 
-    with col2:
-        st.markdown("**주요 강점**")
-        st.info(info['strengths']) # info 박스로 강조
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("**가상 평균 점수**")
+            st.metric(label="점수", value=f"{info['score']} 점")
+
+        with col2:
+            st.markdown("**주요 강점**")
+            st.info(info['strengths'])
+
+        st.markdown("**국어 능력 강점 설명 (가상 해석)**")
+        st.write(info['explanation'])
+    else:
+        st.error("선택한 MBTI 유형의 정보가 없습니다.")
 else:
     st.info("위에서 MBTI 유형을 선택하면 결과가 여기에 표시됩니다.")
 
 st.divider()
-st.warning("🚨 주의: 이 결과는 과학적 근거가 없는 가상 데이터이며, 재미 목적으로만 참고해주세요.", icon="⚠️")
+st.warning("🚨 주의: 이 결과는 과학적 근거가 없는 가상 해석이며, 재미 목적으로만 참고해주세요.", icon="⚠️")
